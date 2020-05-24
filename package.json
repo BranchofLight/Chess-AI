@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "develop": "(kill $(lsof -t -i:8000)) || (webpack --watch &) && (npx ws &) && (sleep 0.25) && (open http://localhost:8000/)"
   },
   "repository": {
     "type": "git",
