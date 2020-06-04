@@ -9,5 +9,6 @@ export const PIECE_CHAR = {
   BISHOP: 'B',
   ROOK: 'R',
   QUEEN: 'Q',
-  KING: 'K'
+  KING: 'K',
+  EMPTY: 'E'
 };

@@ -15,11 +15,11 @@ const firstRank = [
 
 export const INIT_BOARD = [
   firstRank.map(p => b(COLOUR.BLACK, p)),
-  Array(8).map(a => b(COLOUR.BLACK, PIECE_CHAR.PAWN)),
-  Array(8),
-  Array(8),
-  Array(8),
-  Array(8),
-  Array(8).map(a => b(COLOUR.WHITE, PIECE_CHAR.PAWN)),
+  Array(8).fill({}).map(a => b(COLOUR.BLACK, PIECE_CHAR.PAWN)),
+  Array(8).fill({ piece: PIECE_CHAR.EMPTY }),
+  Array(8).fill({ piece: PIECE_CHAR.EMPTY }),
+  Array(8).fill({ piece: PIECE_CHAR.EMPTY }),
+  Array(8).fill({ piece: PIECE_CHAR.EMPTY }),
+  Array(8).fill({}).map(a => b(COLOUR.WHITE, PIECE_CHAR.PAWN)),
   firstRank.map(p => b(COLOUR.WHITE, p))
 ];
