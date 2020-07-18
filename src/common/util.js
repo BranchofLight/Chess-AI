@@ -1,4 +1,4 @@
-import { COLOUR, PIECE_CHAR } from './constants.js';
+import { COLOUR, PIECE_CHAR } from "./constants.js";
 
 // export const getIndexFromChessCoords = chessCoords => {
 //   let [ column, row ] = chessCoords;
@@ -22,7 +22,8 @@ export const isMoveValid = (startIndex, endIndex, board) => {
 
   // Checks to see if piece is not moving at all
   // Is this necessary? Or better part of game logic to not skip turn?
-  if (startIndex.row === endIndex.row && startIndex.column === endIndex.column) return false;
+  if (startIndex.row === endIndex.row && startIndex.column === endIndex.column)
+    return false;
 
   const pieceToMove = board[startIndex.row][startIndex.column];
   switch (pieceToMove) {
@@ -50,11 +51,15 @@ const isTherePieceAt = (index, board) => {
 
 const whatPieceIsAt = (index, board) => {
   return board[index.row][index.column];
-}
+};
 
 const isMoveOffBoard = (index, board) => {
-  return index.row >= 0 && index.row < board.length &&
-         index.column >= 0 && index.column <= board[0].length;
+  return (
+    index.row >= 0 &&
+    index.row < board.length &&
+    index.column >= 0 &&
+    index.column <= board[0].length
+  );
 };
 
 // I have no idea if this will work
@@ -80,7 +85,7 @@ const isLinePathBlocked = (startIndex, endIndex, board) => {
   for (
     let r = startIndex.row, c = startIndex.column;
     Math.abs(r - endIndex.row) > 0 && Math.abs(c - endIndex.column) > 0;
-    r++, c++;
+    r++, c++
   ) {
     if (board[r][c] !== PIECE_CHAR.EMPTY) {
       return false;
@@ -93,22 +98,25 @@ const isLinePathBlocked = (startIndex, endIndex, board) => {
 const isPawnMoveValid = (pawnToMove, startIndex, endIndex, board) => {
   const isTherePieceAtEnd = isTherePieceAt(endIndex, board);
 
-  const mod = (pawnToMove.colour === COLOUR.WHITE) ? 1 : -1;
-  const enemyColour = (pawnToMove.colour === COLOUR.WHITE) ? COLOUR.BLACK : COLOUR.WHITE;
+  const mod = pawnToMove.colour === COLOUR.WHITE ? 1 : -1;
+  const enemyColour =
+    pawnToMove.colour === COLOUR.WHITE ? COLOUR.BLACK : COLOUR.WHITE;
 
   if (startIndex.column === endIndex.column) {
-    if (endIndex.row - startIndex.row === (1 * mod) && !isTherePieceAtEnd) {
+    if (endIndex.row - startIndex.row === 1 * mod && !isTherePieceAtEnd) {
       return true;
-    } else if (endIndex.row - startIndex.row === (2 * mod) &&
-               !pawnToMove.hasMoved && !isTherePieceAtEnd
+    } else if (
+      endIndex.row - startIndex.row === 2 * mod &&
+      !pawnToMove.hasMoved &&
+      !isTherePieceAtEnd
     ) {
       return true;
     }
   }
 
   if (
-    endIndex.row - startIndex.row === (1 * mod) &&
-    Math.abs(endIndex.column - startIndex.column) === (1 * mod) &&
+    endIndex.row - startIndex.row === 1 * mod &&
+    Math.abs(endIndex.column - startIndex.column) === 1 * mod &&
     isTherePieceAtEnd &&
     whatPieceIsAt(endIndex, board).colour === enemyColour
   ) {
@@ -122,14 +130,17 @@ const isKnightMoveValid = (knightToMove, startIndex, endIndex, board) => {
   const isTherePieceAtEnd = isTherePieceAt(endIndex, board);
   const pieceAtEnd = whatPieceIsAt(endIndex, board);
 
-  const enemyColour = (knightToMove.colour === COLOUR.WHITE) ? COLOUR.BLACK : COLOUR.WHITE;
+  const enemyColour =
+    knightToMove.colour === COLOUR.WHITE ? COLOUR.BLACK : COLOUR.WHITE;
 
   const rowMoveAbs = Math.abs(endIndex.row - startIndex.row);
   const colMoveAbs = Math.abs(endIndex.column - startIndex.column);
 
   return (
-    ((rowMoveAbs === 2 && colMoveAbs === 1) || (rowMoveAbs === 1 && colMoveAbs === 2)) &&
-    ((!isTherePieceAtEnd) || (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour))
+    ((rowMoveAbs === 2 && colMoveAbs === 1) ||
+      (rowMoveAbs === 1 && colMoveAbs === 2)) &&
+    (!isTherePieceAtEnd ||
+      (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour))
   );
 };
 
@@ -137,17 +148,19 @@ const isBishopMoveValid = (bishopToMove, startIndex, endIndex, board) => {
   const isTherePieceAtEnd = isTherePieceAt(endIndex, board);
   const pieceAtEnd = whatPieceIsAt(endIndex, board);
 
-  const enemyColour = (bishopToMove.colour === COLOUR.WHITE) ? COLOUR.BLACK : COLOUR.WHITE;
+  const enemyColour =
+    bishopToMove.colour === COLOUR.WHITE ? COLOUR.BLACK : COLOUR.WHITE;
 
   const rowMoveAbs = Math.abs(endIndex.row - startIndex.row);
   const colMoveAbs = Math.abs(endIndex.column - startIndex.column);
 
-  const isMoveDiagnol = (rowMoveAbs === colMoveAbs);
+  const isMoveDiagnol = rowMoveAbs === colMoveAbs;
   if (isMoveDiagnol) return false;
   if (isPathBlocked(startIndex, endIndex, board)) return false;
 
   return (
-    ((!isTherePieceAtEnd) || (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour))
+    !isTherePieceAtEnd ||
+    (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour)
   );
 };
 
@@ -155,17 +168,19 @@ const isRookMoveValid = (rookToMove, startIndex, endIndex, board) => {
   const isTherePieceAtEnd = isTherePieceAt(endIndex, board);
   const pieceAtEnd = whatPieceIsAt(endIndex, board);
 
-  const enemyColour = (rookToMove.colour === COLOUR.WHITE) ? COLOUR.BLACK : COLOUR.WHITE;
+  const enemyColour =
+    rookToMove.colour === COLOUR.WHITE ? COLOUR.BLACK : COLOUR.WHITE;
 
   const rowMoveAbs = Math.abs(endIndex.row - startIndex.row);
   const colMoveAbs = Math.abs(endIndex.column - startIndex.column);
 
-  const isStraightLine = (rowMoveAbs === 0 ^ colMoveAbs === 0);
+  const isStraightLine = (rowMoveAbs === 0) ^ (colMoveAbs === 0);
   if (!isStraightLine) return false;
   if (isPathBlocked(startIndex, endIndex, board)) return false;
 
   return (
-    ((!isTherePieceAtEnd) || (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour))
+    !isTherePieceAtEnd ||
+    (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour)
   );
 };
 
@@ -173,18 +188,20 @@ const isQueenMoveValid = (queenToMove, startIndex, endIndex, board) => {
   const isTherePieceAtEnd = isTherePieceAt(endIndex, board);
   const pieceAtEnd = whatPieceIsAt(endIndex, board);
 
-  const enemyColour = (queenToMove.colour === COLOUR.WHITE) ? COLOUR.BLACK : COLOUR.WHITE;
+  const enemyColour =
+    queenToMove.colour === COLOUR.WHITE ? COLOUR.BLACK : COLOUR.WHITE;
 
   const rowMoveAbs = Math.abs(endIndex.row - startIndex.row);
   const colMoveAbs = Math.abs(endIndex.column - startIndex.column);
 
-  const isStraightLine = (rowMoveAbs === 0 ^ colMoveAbs === 0);
-  const isMoveDiagnol = (rowMoveAbs === colMoveAbs);
+  const isStraightLine = (rowMoveAbs === 0) ^ (colMoveAbs === 0);
+  const isMoveDiagnol = rowMoveAbs === colMoveAbs;
   if (!isStraightLine && !isMoveDiagnol) return false;
   if (isPathBlocked(startIndex, endIndex, board)) return false;
 
   return (
-    ((!isTherePieceAtEnd) || (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour))
+    !isTherePieceAtEnd ||
+    (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour)
   );
 };
 
@@ -192,13 +209,15 @@ const isKingMoveValid = (kingToMove, startIndex, endIndex, board) => {
   const isTherePieceAtEnd = isTherePieceAt(endIndex, board);
   const pieceAtEnd = whatPieceIsAt(endIndex, board);
 
-  const enemyColour = (queenToMove.colour === COLOUR.WHITE) ? COLOUR.BLACK : COLOUR.WHITE;
+  const enemyColour =
+    queenToMove.colour === COLOUR.WHITE ? COLOUR.BLACK : COLOUR.WHITE;
 
   const rowMoveAbs = Math.abs(endIndex.row - startIndex.row);
   const colMoveAbs = Math.abs(endIndex.column - startIndex.column);
 
   return (
     (rowMoveAbs === 1 || colMoveAbs === 1) &&
-    ((!isTherePieceAtEnd) || (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour))
+    (!isTherePieceAtEnd ||
+      (isTherePieceAtEnd && pieceAtEnd.colour === enemyColour))
   );
 };

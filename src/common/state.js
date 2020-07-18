@@ -2,8 +2,8 @@
 // is move valid
 // make move
 
-import { INIT_BOARD } from './init_board.js';
-import { COLOUR, PIECE_CHAR } from './constants.js';
+import { INIT_BOARD } from "./init_board.js";
+import { COLOUR, PIECE_CHAR } from "./constants.js";
 
 const Game = {
   board: INIT_BOARD,
